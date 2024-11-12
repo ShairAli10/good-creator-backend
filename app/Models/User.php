@@ -5,12 +5,16 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -20,7 +24,21 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
+        'email_verified_at',
         'password',
+        'user_type',
+        'service_type',
+        'bio',
+        'pofile_pic',
+        'device_id',
+        'a_code',
+        'g_code',
+        'f_code',
+        'email_code',
+        'firebase_id',
+        'lat',
+        'longi',
     ];
 
     /**
@@ -31,6 +49,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'email_verified_at'
     ];
 
     /**
@@ -44,5 +63,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected $dates = ['deleted_at'];
+    public function getDeletedAtAttribute($value)
+    {
+        return $value !== null ? $value : '';
+    }
+
+    public function creator_media()
+    {
+        return $this->hasMany(CreatorMediaFiles::class);
     }
 }

@@ -13,19 +13,22 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name')->default('');
+            $table->string('email')->unique()->default('');
             $table->string(column: 'phone')->default('');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->default('');
             $table->string('user_type')->default('');
             $table->string('service_type')->default('');
-            $table->string('bio')->default('');
+            $table->longText('bio')->default('');
             $table->string('pofile_pic')->default('');
             $table->longText('device_id')->default('');
+            $table->longText('firebase_id')->default('');
             $table->longText('a_code')->default('');
             $table->longText('g_code')->default('');
             $table->longText('f_code')->default('');
+            $table->string('lat')->default('');
+            $table->string('longi')->default('');
             $table->integer('email_code')->default(0);
             $table->rememberToken();
             $table->timestamps();
