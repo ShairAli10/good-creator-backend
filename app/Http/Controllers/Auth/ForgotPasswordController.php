@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\VerifyOTPRequest;
 use App\Mail\GenerateMailForOTP;
+use App\Models\Package;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -51,6 +53,20 @@ class ForgotPasswordController extends Controller
         if ($user) {
             User::where('email', $email)->update(['email_code' => 0]);
             $user_data = $user->refresh()->load('creator_media');
+            $user_data['service_detail'] = $user_data->service_id
+                ? Service::find($user_data->service_id)
+                : (object)[];
+            $user_data['specilization_detail'] = $user->specilization_id
+                ? Service::find($user_data->specilization_id)
+                : (object)[];
+            $user_data['package_detail'] = $user_data->package_id
+                ? Package::find($user_data->package_id)
+                : (object)[];
+            if ($user_data->user_type == 'user') {
+                $user_data['first_login'] = $user_data->service_id == 0;
+            } else {
+                $user_data['first_login'] = $user_data->bio == "";
+            }
             $data = [
                 'status' => true,
                 'message' => 'OTP Verified',
@@ -59,7 +75,6 @@ class ForgotPasswordController extends Controller
             return response()->json($data, 200);
         }
         return ResponseHelper::jsonResponse(false, 'Invalid OTP. Please enter a valid OTP.');
-
     }
     public function reset_password(ResetPasswordRequest $request)
     {

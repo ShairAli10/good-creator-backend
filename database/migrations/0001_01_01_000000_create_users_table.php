@@ -19,9 +19,11 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->default('');
             $table->string('user_type')->default('');
-            $table->string('service_type')->default('');
+            $table->integer('service_id')->default(0);
+            $table->integer('specilization_id')->default(0);
+            $table->integer('package_id')->default(0);            
             $table->longText('bio')->default('');
-            $table->string('pofile_pic')->default('');
+            $table->string('profile_pic')->default('');
             $table->longText('device_id')->default('');
             $table->longText('firebase_id')->default('');
             $table->longText('a_code')->default('');
