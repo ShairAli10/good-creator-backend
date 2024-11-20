@@ -36,6 +36,7 @@ class User extends Authenticatable
         'a_code',
         'g_code',
         'f_code',
+        'auto_match',
         'email_code',
         'firebase_id',
         'lat',
@@ -76,4 +77,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(CreatorMediaFiles::class);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'user_id');
+    }
+
+
 }

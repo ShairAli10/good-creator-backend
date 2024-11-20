@@ -31,6 +31,7 @@ return new class extends Migration
             $table->longText('f_code')->default('');
             $table->string('lat')->default('');
             $table->string('longi')->default('');
+            $table->integer('auto_match')->default(0);
             $table->integer('email_code')->default(0);
             $table->rememberToken();
             $table->timestamps();
