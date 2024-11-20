@@ -13,7 +13,7 @@ use App\Models\{CreatorMediaFiles, Package, Service, User,};
 
 class ProfileController extends Controller
 {
-    // get user profile
+    // get creator profile
     public function my_profile(UserID $request)
     {
         $user = User::with('creator_media')->find($request->user_id);
@@ -130,4 +130,28 @@ class ProfileController extends Controller
         $media->delete();
         return ResponseDataHelper::jsonDataResponse(true, 'deleted successfully', (object)[], 200);
     }
+
+    public function delete_account(UserID $request)
+    {
+        $user = User::find($request->user_id);
+        if (!$user) {
+            return ResponseDataHelper::jsonDataResponse(true, 'User not found.', (object)[], 200);
+        }
+
+        $user->delete();
+        return ResponseDataHelper::jsonDataResponse(true, 'Account Deleted successfully', (object)[], 200);
+    }
+
+     // update user name
+     public function edit_phone_no(UserID $request)
+     {
+         $user = User::find($request->user_id);
+         if (!$user) {
+             return ResponseDataHelper::jsonDataResponse(true, 'User not found.', (object)[], 200);
+         }
+ 
+         $user->phone = $request->phone;
+         $user->save();
+         return ResponseDataHelper::jsonDataResponse(true, 'updated successfully', (object)[], 200);
+     }
 }

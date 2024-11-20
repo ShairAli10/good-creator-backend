@@ -6,13 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
-class CreatorMediaFiles extends Model
+class DayOff extends Model
 {
-    Use HasFactory;
+    use HasFactory;
 
     protected $fillable = [
-        'media',
-        'user_id'
+        'user_id',
+        'date',
+        'start_time',
+        'end_time'
     ];
+
 
 }

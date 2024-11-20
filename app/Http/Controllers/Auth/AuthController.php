@@ -314,23 +314,25 @@ class AuthController extends Controller
         User::where('id', $request->user_id)
             ->update([
                 'service_id' => $request->service_id,
-                'package_id' => $request->package_id
+                'package_id' => $request->package_id,
+                'auto_match' => $request->auto_match,
             ]);
-        $user['service_detail'] = $user->service_id
-            ? Service::find($user->service_id)
+        $user_data = User::with('creator_media')->find($request->user_id);
+        $user_data['service_detail'] = $user_data->service_id
+            ? Service::find($user_data->service_id)
             : (object)[];
-        $user['specilization_detail'] = $user->specilization_id
-            ? Service::find($user->specilization_id)
+        $user_data['specilization_detail'] = $user_data->specilization_id
+            ? Service::find($user_data->specilization_id)
             : (object)[];
-        $user['package_detail'] = $user->package_id
-            ? Package::find($user->package_id)
+        $user_data['package_detail'] = $user_data->package_id
+            ? Package::find($user_data->package_id)
             : (object)[];
-        if ($user->user_type === 'user') {
-            $user['first_login'] = $user->service_id == 0;
+        if ($user_data->user_type === 'user') {
+            $user_data['first_login'] = $user_data->service_id == 0;
         } else {
-            $user['first_login'] = $user->bio == "";
+            $user_data['first_login'] = $user_data->bio == "";
         }
-        return ResponseDataHelper::jsonDataResponse(true, 'Updated successfully', $user, 200);
+        return ResponseDataHelper::jsonDataResponse(true, 'Updated successfully', $user_data, 200);
     }
 
     // update creator onboarding information
